@@ -4,10 +4,7 @@ import CLS.*;
 import DAO.*;
 import JavaBeans.Company;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,61 +35,85 @@ public class CompaniesDBDAO implements CompaniesDAO {
 
     @Override
     public void addCompany(Company company) {
-        final String ADD_COMPANY = "INSERT INTO `jb_project`.`companies` (`id`, `NAME`, `EMAIL`, `PASSWORD`) VALUES ('?', '?', '?', '?');";
-//        Map<Integer,Object> params = new HashMap<>();
-//        params.put(1,company.getID());
-//        params.put(2,company.getName());
-//        params.put(3,company.getEmail());
-//        params.put(4,company.getPassword());
-//
-//         DBtools.runQuery(ADD_COMPANY,params);
-////        if (flag)
-////            System.out.println("The Company has benn added successfully.");
-////        else
-////            System.out.println("ERROR :The Company not added.");
+        final String ADD_COMPANY = "INSERT INTO `jb_project`.`companies` (`id`, `NAME`, `EMAIL`, `PASSWORD`) VALUES (?,?,?,?);";
+        Map<Integer, Object> params = new HashMap<>();
+        params.put(1, company.getID());
+        params.put(2, company.getName());
+        params.put(3, company.getEmail());
+        params.put(4, company.getPassword());
 
-        Connection connection = null;
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(ADD_COMPANY);
-
-            preparedStatement.setInt(1, company.getID());
-            preparedStatement.setString(2,company.getName());
-            preparedStatement.setString(3,company.getEmail() );
-            preparedStatement.setString(4,company.getPassword() );
-
-            preparedStatement.execute();
-            System.out.println("The Company has benn added successfully.");
-
-
-        } catch (InterruptedException | SQLException e) {
-//            throw new RuntimeException(e);
-            System.out.println(e.getMessage());
+        boolean flag = DBtools.runQuery(ADD_COMPANY, params);
+        if (flag)
+            System.out.println("The Company has been added successfully.");
+        else
             System.out.println("ERROR :The Company not added.");
-        } finally {
-            ConnectionPool.getInstance().restoreConnection(connection);
+
+
+    }
+
+    @Override
+    public void updateCompany(Company company) throws SQLException {
+
+        if (isCompanyExists(company.getEmail(), company.getPassword())) {
+            final String id = String.valueOf(company.getID());
+            final String UPDATE = "UPDATE `jb_project`.`companies` SET `id` = ?, `NAME` = ?, `EMAIL` = ?, `PASSWORD` = ? WHERE (`id` = " + id + ");";
+            Map<Integer, Object> params = new HashMap<>();
+            params.put(1, company.getID());
+            params.put(2, company.getName());
+            params.put(3, company.getEmail());
+            params.put(4, company.getPassword());
+            DBtools.runQuery(UPDATE, params);
+            System.out.println("The Company has been Updated successfully.");
+        } else {
+            System.out.println("The Company not exists.");
         }
 
 
     }
 
     @Override
-    public void updateCompany(Company company) {
-
-    }
-
-    @Override
     public void deleteCompany(int companyID) {
+        final String DELETE = "DELETE FROM `jb_project`.`companies` WHERE id = " + companyID + ";";
+        boolean flag = DBtools.runQuery(DELETE);
+        if (flag)
+            System.out.println("The Company deleted successfully.");
+        else
+            System.out.println("ERROR ,the company not deleted.");
 
     }
 
     @Override
-    public ArrayList<Company> getAllCompanies() {
-        return null;
+    public ArrayList<Company> getAllCompanies() throws SQLException {
+        final String ALL_COMPANIES = "SELECT * FROM `jb_project`.`companies`;";
+        Map<Integer, Object> params = new HashMap<>();
+        ResultSet resultSet = DBtools.runQueryForResult(ALL_COMPANIES, params);
+        ArrayList<Company> companies = new ArrayList<>();
+        while (resultSet.next()) {
+            int ID = resultSet.getInt(1);
+            String name = resultSet.getString(2);
+            String email = resultSet.getString(3);
+            String pass = resultSet.getString(4);
+            companies.add(new Company(ID, name, email, pass, new ArrayList<>()));
+        }
+        return companies;
+
     }
 
     @Override
-    public Company getOneCompany(int companyID) {
+    public Company getOneCompany(int companyID) throws SQLException {
+        final String ONE_COMPANIES = "SELECT * FROM `jb_project`.`companies` WHERE id = " + companyID + ";";
+        Map<Integer, Object> params = new HashMap<>();
+        ResultSet resultSet = DBtools.runQueryForResult(ONE_COMPANIES, params);
+        while (resultSet.next()) {
+
+            int ID = resultSet.getInt(1);
+            String name = resultSet.getString(2);
+            String email = resultSet.getString(3);
+            String pass = resultSet.getString(4);
+            return new Company(ID, name, email, pass, new ArrayList<>());
+        }
         return null;
     }
+
+
 }

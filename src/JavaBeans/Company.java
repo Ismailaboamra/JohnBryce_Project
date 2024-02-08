@@ -71,6 +71,6 @@ public class Company {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", coupons=" + coupons +
-                '}';
+                '}'+"\n";
     }
 }
