@@ -10,11 +10,11 @@ public interface CompaniesDAO {
 
     void addCompany(Company company);
 
-    void updateCompany(Company company);
+    void updateCompany(Company company) throws SQLException;
 
     void deleteCompany(int companyID);
 
-    ArrayList<Company> getAllCompanies();
+    ArrayList<Company> getAllCompanies() throws SQLException;
 
-    Company getOneCompany(int companyID);
+    Company getOneCompany(int companyID) throws SQLException;
 }
