@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class CompaniesDBDAO implements CompaniesDAO {
 
-    ConnectionPool connectionPool;
+    private ConnectionPool connectionPool;
 
 
     @Override
