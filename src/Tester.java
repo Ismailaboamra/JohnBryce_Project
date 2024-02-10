@@ -23,7 +23,9 @@ public class Tester {
 //        couponsDBDAO.updateCoupon(coupon);
 //        couponsDBDAO.deleteCoupon(2);
 //        System.out.println(couponsDBDAO.getAllCoupons());
-        System.out.println(couponsDBDAO.getOneCoupon(1));
+//        System.out.println(couponsDBDAO.getOneCoupon(1));
+//        couponsDBDAO.addCouponPurchase(1,1);
+        couponsDBDAO.deleteCouponPurchase(1,1);
 
 
 //        Customer customer = new Customer(2,"update","update","2","2",new ArrayList<>());

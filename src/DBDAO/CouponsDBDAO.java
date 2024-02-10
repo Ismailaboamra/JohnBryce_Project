@@ -127,11 +127,28 @@ public class CouponsDBDAO implements CouponsDAO {
 
     @Override
     public void addCouponPurchase(int customerlD, int couponID) {
+        final  String add = "INSERT INTO `jb_project`.`customers_vs_coupons` (`CUSTOMER_ID`, `COUPON_ID`) VALUES (?,?);";
+        HashMap<Integer, Object> params = new HashMap<>();
+        params.put(1, customerlD);
+        params.put(2, couponID);
+        boolean flag = DBtools.runQuery(add, params);
+        if (flag)
+            System.out.println(" Coupon & Purchase been added successfully.");
+        else
+            System.out.println("Error");
+
 
     }
 
     @Override
     public void deleteCouponPurchase(int customerlD, int couponID) {
+        final String DELETE = "DELETE FROM `jb_project`.`customers_vs_coupons` WHERE CUSTOMER_ID = " + customerlD +" AND COUPON_ID = "+couponID+";";
+        boolean flag = DBtools.runQuery(DELETE);
+        if (flag)
+            System.out.println("The CouponPurchase deleted successfully.");
+        else
+            System.out.println("ERROR ,the CouponPurchase not deleted.");
+
 
 
     }
