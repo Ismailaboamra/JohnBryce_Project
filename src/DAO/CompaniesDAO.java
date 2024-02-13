@@ -8,11 +8,11 @@ import JavaBeans.*;
 public interface CompaniesDAO {
     boolean isCompanyExists(String email, String password) throws SQLException;
 
-    void addCompany(Company company);
+    void addCompany(Company company) throws SQLException;
 
     void updateCompany(Company company) throws SQLException;
 
-    void deleteCompany(int companyID);
+    void deleteCompany(int companyID) throws SQLException;
 
     ArrayList<Company> getAllCompanies() throws SQLException;
 

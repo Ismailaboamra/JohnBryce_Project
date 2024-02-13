@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public interface CustomersDAO {
     boolean isCustomerExists(String email, String password) throws SQLException;
 
-    void addCustomer(Customer customer);
+    void addCustomer(Customer customer) throws SQLException;
 
     void updateCustomer(Customer customer) throws SQLException;
 
