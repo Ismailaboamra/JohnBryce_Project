@@ -19,7 +19,7 @@ public class AdminFacade extends ClientFacade {
             super.companiesDAO = new CompaniesDBDAO();
             super.customersDAO = new CustomersDBDAO();
             super.couponsDAO = new CouponsDBDAO();
-        }else {
+        } else {
             throw new IllegalArgumentException("Invalid email or password");
 
 
@@ -35,19 +35,26 @@ public class AdminFacade extends ClientFacade {
     public void addCompany(Company company) throws SQLException {
         super.companiesDAO.addCompany(company);
     }
+
     public void updateCompany(Company company) throws SQLException {
         super.companiesDAO.updateCompany(company);
     }
+
     public void deleteCompany(int companyID) throws SQLException {
         super.companiesDAO.deleteCompany(companyID);
     }
+
     public ArrayList<Company> getAllCompanies() throws SQLException {
         return super.companiesDAO.getAllCompanies();
     }
-   public Company getOneCompany(int companyID) throws SQLException {
+
+    public Company getOneCompany(int companyID) throws SQLException {
         return super.companiesDAO.getOneCompany(companyID);
-   }
-void addCustomer(Customer customer){}
+    }
+
+    public void addCustomer(Customer customer) throws SQLException {
+        super.customersDAO.addCustomer(customer);
+    }
 //+ update Customer(Customer customer)
 //+ deleteCustomer(int customerID)
 //+ getAllCustomers(): ArrayList<Customer>

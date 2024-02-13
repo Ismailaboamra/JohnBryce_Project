@@ -99,6 +99,7 @@ public class CouponsDBDAO implements CouponsDAO {
         return coupons;
     }
 
+
     @Override
     public Coupon getOneCoupon(int couponID) throws SQLException {
         final String ONE_COUPONS = "SELECT * FROM `jb_project`.`coupons` WHERE id = " + couponID + ";";
@@ -151,6 +152,30 @@ public class CouponsDBDAO implements CouponsDAO {
 
 
 
+    }
+    public ArrayList<Coupon> getAllCouponsWithSameCompanyID(int companyID) throws SQLException {
+
+        final String selectAll = "SELECT * FROM `jb_project`.`coupons` WHERE COMPANY_ID = "+companyID+";";
+        Map<Integer, Object> params = new HashMap<>();
+        ResultSet resultSet = DBtools.runQueryForResult(selectAll, params);
+        ArrayList<Coupon> coupons = new ArrayList<>();
+        while (resultSet.next()) {
+            int ID = resultSet.getInt(1);
+            int companyID_ = resultSet.getInt(2);
+            int categoryID = resultSet.getInt(3);
+            String title = resultSet.getString(4);
+            String desc = resultSet.getString(5);
+            Date startDate = resultSet.getDate(6);
+            Date endDate = resultSet.getDate(7);
+            int amount = resultSet.getInt(8);
+            Double price = resultSet.getDouble(9);
+//            String img = resultSet.getString(10);
+            Category category = Category.getCategoryByNumber(categoryID);
+            Coupon coupon = new Coupon(ID, companyID_, category, title, desc, startDate, endDate, amount, price, "");
+
+            coupons.add(coupon);
+        }
+        return coupons;
     }
 }
 
