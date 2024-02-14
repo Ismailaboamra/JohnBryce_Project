@@ -20,11 +20,22 @@ public class Tester {
 //        AdminFacade admin = new AdminFacade("admin@admin.com","admin");
         CompanyFacede companyFacede = new CompanyFacede("10","9");
 
+//        Coupon coupon = new Coupon(3, 4, Category.Restaurant, "5", "update1", new Date(3, 3, 3), new Date(2, 2, 2), 2, 2.00, "3");
+//        companyFacede.addCoupon(coupon);
+//        companyFacede.updateCoupon(coupon);
+//        companyFacede.deleteCoupon(3);
+//        System.out.println(companyFacede.getCompanyCoupons());
+//        System.out.println(companyFacede.getCompanyCoupons(Category.Food));
+//        System.out.println(companyFacede.getCompanyCoupons(1.0));
+//        System.out.println(companyFacede.getCompanyDetails());
+
+
+
+
 //        CompaniesDBDAO companiesDBDAO = new CompaniesDBDAO();
 //        CustomersDBDAO customersDBDAO = new CustomersDBDAO();
 //        CouponsDBDAO couponsDBDAO = new CouponsDBDAO();
 //        Category category = Category.Food;
-//        Coupon coupon = new Coupon(2, 3, category, "2", "2", new Date(2, 2, 2), new Date(2, 2, 2), 2, 2.00, "2");
 //        couponsDBDAO.addCoupon(coupon);
 //        couponsDBDAO.updateCoupon(coupon);
 //        couponsDBDAO.deleteCoupon(2);

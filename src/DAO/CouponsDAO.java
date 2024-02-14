@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface CouponsDAO {
-    void addCoupon(Coupon coupon);
+    void addCoupon(Coupon coupon) throws SQLException;
 
-    void updateCoupon(Coupon coupon);
+    void updateCoupon(Coupon coupon) throws SQLException;
 
     void deleteCoupon(int couponID);
 
