@@ -1,6 +1,7 @@
 import CLS.ConnectionPool;
 import DBDAO.*;
 import Facade.Clients.AdminFacade;
+import Facade.Clients.CompanyFacede;
 import JavaBeans.Category;
 import JavaBeans.Company;
 import JavaBeans.Coupon;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 public class Tester {
     public static void main(String[] args) throws InterruptedException, SQLException {
 
-        AdminFacade admin = new AdminFacade("admin@admin.com","admin");
+//        AdminFacade admin = new AdminFacade("admin@admin.com","admin");
+        CompanyFacede companyFacede = new CompanyFacede("10","9");
 
 //        CompaniesDBDAO companiesDBDAO = new CompaniesDBDAO();
 //        CustomersDBDAO customersDBDAO = new CustomersDBDAO();
