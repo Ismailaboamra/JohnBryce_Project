@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomersDBDAO implements CustomersDAO{
-   private ConnectionPool connectionPool;
+public class CustomersDBDAO implements CustomersDAO {
+    private ConnectionPool connectionPool;
 
     @Override
     public boolean isCustomerExists(String email, String password) throws SQLException {
@@ -36,7 +36,7 @@ public class CustomersDBDAO implements CustomersDAO{
 
     @Override
     public void addCustomer(Customer customer) throws SQLException {
-//        if (checkIdIsExists(customer.getId())) {
+        if (checkEmailIsExists1(customer.getEmail())) {
             final String ADD_CUSTOMER = "INSERT INTO `jb_project`.`customers` (`id`, `FIRST_NAME`,`LAST_NAME`, `EMAIL`, `PASSWORD`) VALUES (?,?,?,?,?);";
             final String ADD_COUPONS = "INSERT INTO `jb_project`.`customers_vs_coupons` (`CUSTOMER_ID`, `COUPON_ID`) VALUES (?, ?);";
             Map<Integer, Object> params1 = new HashMap<>();
@@ -50,8 +50,8 @@ public class CustomersDBDAO implements CustomersDAO{
 
             ArrayList<Coupon> coupons = customer.getCoupons();
             for (int i = 0; i < coupons.size(); i++) {
-                params2.put(1,customer.getId());
-                params2.put(2,coupons.get(i).getId());
+                params2.put(1, customer.getId());
+                params2.put(2, coupons.get(i).getId());
             }
 
             boolean add_customer = DBtools.runQuery(ADD_CUSTOMER, params1);
@@ -62,27 +62,42 @@ public class CustomersDBDAO implements CustomersDAO{
                 System.out.println("The Customer has been added successfully.");
             else
                 System.out.println("ERROR :The Customer not added.");
-//        }else {
-//            System.out.println("The Customer is exists");
-//
-//        }
+        } else {
+            System.out.println("The Customer is exists");
+
+        }
 
 
     }
 
     @Override
     public void updateCustomer(Customer customer) throws SQLException {
-        if (isCustomerExists(customer.getEmail(), customer.getPassword())) {
+        if (checkIdIsExists(customer.getId())) {
             final String id = String.valueOf(customer.getId());
-            final String UPDATE = "UPDATE `jb_project`.`customers` SET `id` = ?, `FIRST_NAME` = ?,`LAST_NAME` = ?, `EMAIL` = ?, `PASSWORD` = ? WHERE (`id` = " + id + ");";
-            Map<Integer, Object> params = new HashMap<>();
-            params.put(1, customer.getId());
-            params.put(2, customer.getFirstName());
-            params.put(3, customer.getLastName());
-            params.put(4, customer.getEmail());
-            params.put(5, customer.getPassword());
-            DBtools.runQuery(UPDATE, params);
-            System.out.println("The Customer has been Updated successfully.");
+            final String UPDATE = "UPDATE `jb_project`.`customers` SET  `FIRST_NAME` = ?,`LAST_NAME` = ?, `EMAIL` = ?, `PASSWORD` = ? WHERE (`id` = " + id + ");";
+            final String ADD_COUPONS = "INSERT INTO `jb_project`.`customers_vs_coupons` (`CUSTOMER_ID`, `COUPON_ID`) VALUES (?, ?);";
+            Map<Integer, Object> params1 = new HashMap<>();
+            Map<Integer, Object> params2 = new HashMap<>();
+            params1.put(1, customer.getFirstName());
+            params1.put(2, customer.getLastName());
+            params1.put(3, customer.getEmail());
+            params1.put(4, customer.getPassword());
+            boolean update_customer = DBtools.runQuery(UPDATE, params1);
+
+            ArrayList<Coupon> coupons = customer.getCoupons();
+            for (int i = 0; i < coupons.size(); i++) {
+                if (!checkCustomers_vs_coupons(customer.getId(), coupons.get(i).getId())) {
+                    params2.put(1, customer.getId());
+                    params2.put(2, coupons.get(i).getId());
+                }
+            }
+            boolean update_cupon = DBtools.runQuery(ADD_COUPONS, params2);
+            if (update_customer ) {
+                System.out.println("The Customer has been Updated successfully.");
+            }else {
+                System.out.println("Error :The Customer not Updated ");
+
+            }
         } else {
             System.out.println("The Customer not exists.");
         }
@@ -91,13 +106,19 @@ public class CustomersDBDAO implements CustomersDAO{
     }
 
     @Override
-    public void deleteCustomer(int customerID) {
-        final String DELETE = "DELETE FROM `jb_project`.`customers` WHERE id = " + customerID + ";";
-        boolean flag = DBtools.runQuery(DELETE);
-        if (flag)
-            System.out.println("The Customer deleted successfully.");
-        else
-            System.out.println("ERROR ,the Customer not deleted.");
+    public void deleteCustomer(int customerID) throws SQLException {
+        if (checkIdIsExists(customerID)) {
+            final String DELETE_CUSTOMER = "DELETE FROM `jb_project`.`customers` WHERE id = " + customerID + ";";
+            boolean delete_customer = DBtools.runQuery(DELETE_CUSTOMER);
+            final String DELETE_Customers_vs_coupons = "DELETE FROM `jb_project`.`customers_vs_coupons` WHERE CUSTOMER_ID = " + customerID + ";";
+            boolean delete_Customers_vs_coupons = DBtools.runQuery(DELETE_Customers_vs_coupons);
+            if (delete_customer && delete_Customers_vs_coupons)
+                System.out.println("The Customer deleted successfully.");
+            else
+                System.out.println("ERROR ,the Customer not deleted.");
+        }else {
+            System.out.println("The Customer not exists.");
+        }
 
     }
 
@@ -113,12 +134,15 @@ public class CustomersDBDAO implements CustomersDAO{
             String last_name = resultSet.getString(3);
             String email = resultSet.getString(4);
             String pass = resultSet.getString(5);
-            customers.add(new Customer(ID, first_name,last_name, email, pass, new ArrayList<>()));
+            ArrayList<Coupon> coupons = (new CouponsDBDAO()).getAllCouponsWithSameCompanyID(ID);
+            customers.add(new Customer(ID, first_name, last_name, email, pass,coupons));
         }
-        return customers;    }
+        return customers;
+    }
 
     @Override
     public Customer getOneCustomers(int customerID) throws SQLException {
+        if (checkIdIsExists(customerID)){
         final String ONE_CUSTOMER = "SELECT * FROM `jb_project`.`customers` WHERE id = " + customerID + ";";
         Map<Integer, Object> params = new HashMap<>();
         ResultSet resultSet = DBtools.runQueryForResult(ONE_CUSTOMER, params);
@@ -129,10 +153,18 @@ public class CustomersDBDAO implements CustomersDAO{
             String last_name = resultSet.getString(3);
             String email = resultSet.getString(4);
             String pass = resultSet.getString(5);
-            return new Customer(ID, first_name,last_name, email, pass, new ArrayList<>());
+            ArrayList<Coupon> coupons = (new CouponsDBDAO()).getAllCouponsWithSameCompanyID(ID);
+            return new Customer(ID, first_name, last_name, email, pass, coupons);
 
         }
-        return null;    }
+        }else {
+            System.out.println("The Customer not exists.");
+
+        }
+        return null;
+
+    }
+
     public boolean checkIdIsExists(int id) throws SQLException {
         // check if the ID o is EXISTS;
         boolean checkID = false;
@@ -148,18 +180,32 @@ public class CustomersDBDAO implements CustomersDAO{
 
     }
 
-    public boolean checkEmailIsExists(String email) throws SQLException {
+    public boolean checkEmailIsExists1(String email) throws SQLException {
         // check if the Email o is EXISTS;
         boolean checkEmail = false;
-        final String CHECK = "SELECT * FROM `jb_project`.`customers`;";
+        final String CHECK = "SELECT * FROM jb_project.customers;";
         Map<Integer, Object> params = new HashMap<>();
         ResultSet result = DBtools.runQueryForResult(CHECK, params);
         while (result.next()) {
             String email_ = result.getNString(4);
-            if (email.equals(email_))
+            if (email == email_)
                 return true;
         }
         return false;
 
+    }
+
+    boolean checkCustomers_vs_coupons(int customerID, int couponID) throws SQLException {
+        boolean checkID = false;
+        final String CHECK = "SELECT * FROM `jb_project`.`customers_vs_coupons`;";
+        Map<Integer, Object> params = new HashMap<>();
+        ResultSet result = DBtools.runQueryForResult(CHECK, params);
+        while (result.next()) {
+            int customerID_ = result.getInt(1);
+            int cupon_ID_ = result.getInt(2);
+            if (customerID == customerID_ && couponID == cupon_ID_)
+                return true;
+        }
+        return false;
     }
 }

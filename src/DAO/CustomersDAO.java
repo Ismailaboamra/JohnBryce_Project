@@ -13,7 +13,7 @@ public interface CustomersDAO {
 
     void updateCustomer(Customer customer) throws SQLException;
 
-    void deleteCustomer(int customerID);
+    void deleteCustomer(int customerID) throws SQLException;
 
     ArrayList<Customer> getAllCustomers() throws SQLException;
 

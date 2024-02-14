@@ -20,9 +20,9 @@ public class Tester {
 
 //        CompaniesDBDAO companiesDBDAO = new CompaniesDBDAO();
 //        CustomersDBDAO customersDBDAO = new CustomersDBDAO();
-        CouponsDBDAO couponsDBDAO = new CouponsDBDAO();
-        Category category = Category.Electricity;
-//        Coupon coupon = new Coupon(1, 1, category, "1", "update", new Date(1, 1, 1), new Date(2, 2, 2), 1, 2.00, "2");
+//        CouponsDBDAO couponsDBDAO = new CouponsDBDAO();
+//        Category category = Category.Food;
+//        Coupon coupon = new Coupon(2, 3, category, "2", "2", new Date(2, 2, 2), new Date(2, 2, 2), 2, 2.00, "2");
 //        couponsDBDAO.addCoupon(coupon);
 //        couponsDBDAO.updateCoupon(coupon);
 //        couponsDBDAO.deleteCoupon(2);
@@ -31,16 +31,17 @@ public class Tester {
 //        couponsDBDAO.addCouponPurchase(1,1);
 //        couponsDBDAO.deleteCouponPurchase(1,1);
 
-        ArrayList<Coupon> coupons = new ArrayList<>();
-        coupons.add(couponsDBDAO.getOneCoupon(1));
-        Customer customer = new Customer(2,"new","new","new@new","2",coupons);
-        admin.addCustomer(customer);
-//        customersDBDAO.updateCustomer(customer);
-//        customersDBDAO.deleteCustomer(2);
-//        System.out.println(customersDBDAO.getAllCustomers());
-//        System.out.println(customersDBDAO.getOneCustomers(2));
-//        companiesDBDAO.addCompany(new Company(2,"1","1","1",new ArrayList<>()));
-//        Company company = new Company(5, "5", "8", "9", new ArrayList<>());
+//        ArrayList<Coupon> coupons = new ArrayList<>();
+//        coupons.add(couponsDBDAO.getOneCoupon(1));
+//        coupons.add(coupon);
+
+//        Customer customer = new Customer(2,"update","update","update","2",coupons);
+//        admin.addCustomer(customer);
+//        admin.updateCustomer(customer);
+//        admin.deleteCustomer(2);
+//        System.out.println(admin.getAllCustomers());
+//        System.out.println(admin.getOneCustomer(1));
+//
 
 
 //        admin.addCompany(company);
