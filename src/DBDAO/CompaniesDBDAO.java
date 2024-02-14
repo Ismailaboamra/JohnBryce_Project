@@ -8,13 +8,29 @@ import JavaBeans.Coupon;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CompaniesDBDAO implements CompaniesDAO {
 
     private ConnectionPool connectionPool;
 
+
+    public int get_ID(String email, String password) throws SQLException {
+        final String EXISTS = "SELECT * FROM `jb_project`.`companies`;";
+        Map<Integer, Object> params = new HashMap<>();
+        ResultSet result = DBtools.runQueryForResult(EXISTS, params);
+
+        while (result.next()) {
+            int ID = result.getInt(1);
+            String email_ = result.getNString(3);
+            String pass_ = result.getNString(4);
+
+            if (email.equals(email_) && password.equals(pass_)) {
+                return ID;
+            }
+        }
+        return -1;
+    }
 
     @Override
     public boolean isCompanyExists(String email, String password) throws SQLException {
@@ -65,7 +81,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
         if (checkIdIsExists(company.getID()) && checkNameIsExists(company.getName())) {
             final int id = company.getID();
             final String name = company.getName();
-            final String UPDATE = "UPDATE `jb_project`.`companies` SET `EMAIL` = ?, `PASSWORD` = ? WHERE `id` = "+id+";";
+            final String UPDATE = "UPDATE `jb_project`.`companies` SET `EMAIL` = ?, `PASSWORD` = ? WHERE `id` = " + id + ";";
             Map<Integer, Object> params = new HashMap<>();
 
             params.put(1, company.getEmail());
@@ -75,7 +91,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
             boolean flag = DBtools.runQuery(UPDATE, params);
             if (flag) {
                 System.out.println("The Company has been Updated successfully.");
-            }else {
+            } else {
                 System.out.println("Field Updated company.");
 
             }
@@ -88,7 +104,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
 
     @Override
     public void deleteCompany(int companyID) throws SQLException {
-        if(checkIdIsExists(companyID)) {
+        if (checkIdIsExists(companyID)) {
             final String DELETE_COMPANY = "DELETE FROM `jb_project`.`companies` WHERE id = " + companyID + ";";
             final String DELETE_COUPONS = "DELETE FROM `jb_project`.`coupons` WHERE COMPANY_ID = " + companyID + ";";
             boolean deleteCoupons = DBtools.runQuery(DELETE_COUPONS);
@@ -97,7 +113,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
                 System.out.println("The Company deleted successfully.");
             else
                 System.out.println("ERROR ,the company not deleted.");
-        }else {
+        } else {
             System.out.println("The Company not exists.");
         }
 
@@ -188,6 +204,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
         return false;
 
     }
+
 
 
 }

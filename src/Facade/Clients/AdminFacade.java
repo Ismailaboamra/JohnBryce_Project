@@ -55,8 +55,18 @@ public class AdminFacade extends ClientFacade {
     public void addCustomer(Customer customer) throws SQLException {
         super.customersDAO.addCustomer(customer);
     }
-//+ update Customer(Customer customer)
-//+ deleteCustomer(int customerID)
-//+ getAllCustomers(): ArrayList<Customer>
-//+ getOneCustomer(int customerlD): Customer
+
+    public void updateCustomer(Customer customer) throws SQLException {
+        super.customersDAO.updateCustomer(customer);
+    }
+
+    public void deleteCustomer(int customerID) throws SQLException {
+        super.customersDAO.deleteCustomer(customerID);
+    }
+    public ArrayList<Customer> getAllCustomers() throws SQLException {
+        return super.customersDAO.getAllCustomers();
+    }
+    public Customer getOneCustomer(int customerlD) throws SQLException {
+        return super.customersDAO.getOneCustomers(customerlD);
+    }
 }
