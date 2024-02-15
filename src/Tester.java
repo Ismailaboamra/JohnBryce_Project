@@ -1,9 +1,12 @@
-import DBDAO.*;
-import Facade.Clients.CustomerFacade;
+import Clients.ClientType;
+import Clients.LoginManager;
+import Facade.ClientFacade;
+import Facade.CustomerFacade;
 import JavaBeans.Category;
-import JavaBeans.Coupon;
 
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -15,19 +18,13 @@ public class Tester {
 
 //        AdminFacade admin = new AdminFacade("admin@admin.com","admin");
 //        CompanyFacede companyFacede = new CompanyFacede("10","9");
-        CustomerFacade customerFacade = new CustomerFacade("1","1");
+        LoginManager loginManager = LoginManager.getInstance();
+        ClientFacade customerFacede = loginManager.login("1", "1", ClientType.Customer);
 //        customerFacade.purchaseCoupon(couponsDBDAO.getOneCoupon(4));
-        System.out.println(customerFacade.getCustomerCoupons());
-        System.out.println(customerFacade.getCustomerCoupons(Category.Food));
-        System.out.println(customerFacade.getCustomerCoupons(1.0));
+        System.out.println(((CustomerFacade) (customerFacede)).getCustomerCoupons());
 
-
-
-
-
-
-
-
+//        System.out.println(customerFacade.getCustomerCoupons(Category.Food));
+//        System.out.println(customerFacade.getCustomerCoupons(1.0));
 
 
 //        companyFacede.addCoupon(coupon);
@@ -37,8 +34,6 @@ public class Tester {
 //        System.out.println(companyFacede.getCompanyCoupons(Category.Food));
 //        System.out.println(companyFacede.getCompanyCoupons(1.0));
 //        System.out.println(companyFacede.getCompanyDetails());
-
-
 
 
 //        CompaniesDBDAO companiesDBDAO = new CompaniesDBDAO();
@@ -69,8 +64,6 @@ public class Tester {
 //        admin.deleteCompany(1);
 //        System.out.println(admin.getAllCompanies());
 //        System.out.println(admin.getOneCompany(1));
-
-
 
 
     }
