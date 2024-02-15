@@ -1,4 +1,4 @@
-package Facade.Clients;
+package Facade;
 
 import DBDAO.CompaniesDBDAO;
 import DBDAO.CouponsDBDAO;
