@@ -49,7 +49,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
         if (!checkIdIsExists(coupon.getId())) {
             System.out.println(" The Coupon not exists.");
-        } else if (getOneCoupon(coupon.getId()).getCompanyID() == coupon.getCompanyID()){
+        } else if (getOneCoupon(coupon.getId()).getCompanyID() == coupon.getCompanyID()) {
             final String UPDATE = "UPDATE `jb_project`.`coupons` SET" +
                     "  `CATEGORY_ID`=?, `TITLE`=?, `DESCRIPTION`=?, `START_DATE`=?, `END_DATE`=?, `AMOUNT`=?, `PRICE`=? WHERE (`id` = " + coupon.getId() + ");";
             Map<Integer, Object> params = new HashMap<>();
@@ -66,7 +66,7 @@ public class CouponsDBDAO implements CouponsDAO {
             else
                 System.out.println("The Coupon not added.");
 
-        }else {
+        } else {
             System.out.println(" You can't update the companyID.");
         }
 
@@ -164,16 +164,21 @@ public class CouponsDBDAO implements CouponsDAO {
 
 
     @Override
-    public void addCouponPurchase(int customerlD, int couponID) {
-        final String add = "INSERT INTO `jb_project`.`customers_vs_coupons` (`CUSTOMER_ID`, `COUPON_ID`) VALUES (?,?);";
-        HashMap<Integer, Object> params = new HashMap<>();
-        params.put(1, customerlD);
-        params.put(2, couponID);
-        boolean flag = DBtools.runQuery(add, params);
-        if (flag)
-            System.out.println(" Coupon & Purchase been added successfully.");
-        else
-            System.out.println("Error");
+    public void addCouponPurchase(int customerlD, int couponID) throws SQLException {
+        if (!checkIdIsExists(couponID)) {
+            System.out.println(" The Coupon not exists.");
+        } else {
+
+            final String add = "INSERT INTO `jb_project`.`customers_vs_coupons` (`CUSTOMER_ID`, `COUPON_ID`) VALUES (?,?);";
+            HashMap<Integer, Object> params = new HashMap<>();
+            params.put(1, customerlD);
+            params.put(2, couponID);
+            boolean flag = DBtools.runQuery(add, params);
+            if (flag)
+                System.out.println(" Coupon & Purchase been added successfully.");
+            else
+                System.out.println("Error");
+        }
 
 
     }
