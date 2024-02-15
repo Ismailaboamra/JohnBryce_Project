@@ -1,6 +1,5 @@
 package DAO;
 
-import JavaBeans.Company;
 import JavaBeans.Customer;
 
 import java.sql.SQLException;

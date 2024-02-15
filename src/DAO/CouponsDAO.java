@@ -16,7 +16,7 @@ public interface CouponsDAO {
 
     Coupon getOneCoupon(int couponID) throws SQLException;
 
-    void addCouponPurchase(int customerlD, int couponID);
+    void addCouponPurchase(int customerlD, int couponID) throws SQLException;
 
     void deleteCouponPurchase(int customerlD, int couponID);
 }
