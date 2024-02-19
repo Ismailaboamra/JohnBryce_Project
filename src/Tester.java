@@ -1,9 +1,14 @@
 import Clients.ClientType;
 import Clients.LoginManager;
 import Facade.ClientFacade;
+import Facade.CompanyFacede;
 import Facade.CustomerFacade;
 import JavaBeans.Category;
+import JavaBeans.Coupon;
+import Jobs.CouponExpirationDailyJob;
 
+import javax.swing.plaf.IconUIResource;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLOutput;
@@ -13,15 +18,23 @@ import java.sql.SQLOutput;
 public class Tester {
     public static void main(String[] args) throws InterruptedException, SQLException {
 
+        CouponExpirationDailyJob couponExpirationDailyJob =new CouponExpirationDailyJob();
+        Thread job = new Thread(couponExpirationDailyJob);
+        job.start();
+
+
 //        CustomersDBDAO customersDBDAO = new CustomersDBDAO();
 //        CouponsDBDAO couponsDBDAO = new CouponsDBDAO();
 
 //        AdminFacade admin = new AdminFacade("admin@admin.com","admin");
-//        CompanyFacede companyFacede = new CompanyFacede("10","9");
-        LoginManager loginManager = LoginManager.getInstance();
-        ClientFacade customerFacede = loginManager.login("1", "1", ClientType.Customer);
-//        customerFacade.purchaseCoupon(couponsDBDAO.getOneCoupon(4));
-        System.out.println(((CustomerFacade) (customerFacede)).getCustomerCoupons());
+//        CompanyFacede companyFacede = new CompanyFacede("1@1.com","111");
+//        LoginManager loginManager = LoginManager.getInstance();
+//
+//        CompanyFacede companyFacade = (CompanyFacede) loginManager.login("1@1.com", "111", ClientType.Company);
+//        Coupon coupon1 = new Coupon(4,1,Category.Vacation,"4","new4",new Date(2024,1,1),new Date(2024,2,2),5,50.0,"3");
+//        companyFacade.addCoupon(coupon1);
+////        customerFacade.purchaseCoupon(couponsDBDAO.getOneCoupon(4));
+//        System.out.println(((CustomerFacade) (customerFacede)).getCustomerCoupons());
 
 //        System.out.println(customerFacade.getCustomerCoupons(Category.Food));
 //        System.out.println(customerFacade.getCustomerCoupons(1.0));
