@@ -1,9 +1,11 @@
 package Spring.Clients;
 
-import Spring.Facade.AdminFacade;
-import Spring.Facade.ClientFacade;
-import Spring.Facade.CompanyFacede;
-import Spring.Facade.CustomerFacade;
+;
+import Spring.enums.ClientType;
+import Spring.facades.AdminFacade;
+import Spring.facades.CompanyFacade;
+import Spring.facades.CouponClientFacade;
+import Spring.facades.CustomerFacade;
 
 import java.sql.SQLException;
 
@@ -23,14 +25,14 @@ public class LoginManager {
     }
 
     // Login function
-    public ClientFacade login(String email, String password, ClientType clientType) throws SQLException {
+    public CouponClientFacade login(String email, String password, ClientType clientType) throws SQLException {
         try {
-            if (clientType == ClientType.Admin) {
+            if (clientType == ClientType.ADMIN) {
                 return new AdminFacade(email, password);
-            } else if (clientType == ClientType.Customer) {
-                return new CustomerFacade(email, password);
-            } else if (clientType == ClientType.Company) {
-                return new CompanyFacede(email, password);
+            } else if (clientType == ClientType.CUSTOMER) {
+                return new CustomerFacade();
+            } else if (clientType == ClientType.COMPANY) {
+//                return new CompanyFacade(email, password);
             } else {
                 return null;
             }
@@ -40,6 +42,7 @@ public class LoginManager {
             throw new IllegalArgumentException("Invalid email or password");
 
         }
+        return null;
     }
 
 
@@ -47,6 +50,7 @@ public class LoginManager {
     private boolean isValidAdminLogin(String email, String password) {
         return email.equals("admin@admin.com") && password.equals("admin");
     }
+
 
 
 }
