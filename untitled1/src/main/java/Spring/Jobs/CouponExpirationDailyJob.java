@@ -1,7 +1,9 @@
 package Spring.Jobs;
 
-import Spring.DBDAO.CouponsDBDAO;
-import Spring.JavaBeans.Coupon;
+import Spring.DBDAO.CouponDBDAO;
+import Spring.entities.Coupon;
+import Spring.exceptions.CouponsNotFoundException;
+
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 public class CouponExpirationDailyJob implements Runnable{
 
-    private CouponsDBDAO couponsDAO;
+    private CouponDBDAO couponsDAO;
 
     public CouponExpirationDailyJob() {
     }
@@ -20,20 +22,20 @@ public class CouponExpirationDailyJob implements Runnable{
     public void run() {
         this.quit = true;
         LocalDate currectDate = LocalDate.now();
-        this.couponsDAO = new CouponsDBDAO();
+        this.couponsDAO = new CouponDBDAO();
         try {
             while (quit) {
                 ArrayList<Coupon> arrayList = couponsDAO.getAllCoupons();
 
                     for (Coupon coupon : arrayList) {
-                        if (coupon.getEndDate().toLocalDate().isBefore(currectDate)) {
-                            this.couponsDAO.deleteCoupon(coupon.getId());
+                        if (true) {
+                            this.couponsDAO.removeCompanyCoupons(coupon.getId());
                             System.out.println("The coupon deleted by CouponExpirationDailyJob thread.");
                         }
                     }
                 }
 
-        } catch (SQLException e) {
+        } catch (CouponsNotFoundException e) {
             throw new RuntimeException(e);
 
         }
